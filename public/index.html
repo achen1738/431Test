@@ -1,43 +1,116 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <form
+      Name="form"
+      style="display: flex; flex-direction: column; width: 100%;"
+      id="formForm"
+      onsubmit="validateForm()"
+    >
+      <label for="accName">Account Name</label>
+      <input Name="acc" id="accName" type="text" />
+      <label for="dispName">Display Name</label>
+      <input Name="disp" id="dispName" type="text" />
+      <label for="email">Email</label>
+      <input Name="email" id="email" type="email" />
+      <label for="date">Date of Birth</label>
+      <input Name="date" id="date" type="date" />
+      <label for="phone">Phone Number</label>
+      <input
+        Name="phone"
+        id="phone"
+        type="tel"
+        pattern="\d{3}-\d{3}-\d{4}"
+        title="The given number has to follow this format XXX-XXX-XXXX."
+      />
+      <label for="password">Password</label>
+      <input Name="pass" id="password" type="password" />
+      <label for="passwordConf">Password Confirmation</label>
+      <input Name="passConf" id="passwordConf" type="password" />
+      <div style="display: flex; flex-direction: row-reverse; margin-top: 5px;">
+        <input type="reset" value="Clear" style="margin-left: 5px;" />
+        <input type="submit" />
+      </div>
+    </form>
+    <script>
+      (function() {
+        "use strict";
+        window.addEventListener(
+          "load",
+          function() {
+            document.getElementById("formForm").addEventListener(
+              "submit",
+              function(event) {
+                event.target.checkValidity();
+                event.preventDefault(); // Prevent form submission and contact with server
+                event.stopPropagation();
+              },
+              false
+            );
+          },
+          false
+        );
+      })();
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+      function olderThan18(day, month, year) {
+        return new Date(year + 18, month - 1, day) <= new Date();
+      }
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+      function validateForm() {
+        let errorString = "";
+        const accountName = document.getElementById("accName").value;
+        const displayName = document.getElementById("dispName").value;
+        const email = document.getElementById("email").value;
+        const date = document.getElementById("date").value;
+        const phone = document.getElementById("phone").value;
+        const pass = document.getElementById("password").value;
+        const passConf = document.getElementById("passwordConf").value;
+        let dates = date.split("-").map(num => parseInt(num));
+        let error = false;
+
+        // if (!olderThan18(dates[2], dates[1], dates[0])) {
+        //   errorString +=
+        //     "Date error: The given date of birth has to be older than 18 years old.\n";
+        //   error = true;
+        // }
+
+        if (!/^[a-zA-Z][a-zA-Z0-9]+$/.test(accountName)) {
+          errorString +=
+            "Account name error: There can only be letters and numbers, and the first character has to be a letter.\n";
+          error = true;
+        }
+
+        // if (!email.includes(".")) {
+        //   errorString +=
+        //     "Email error: There has to be at least a '.' in the email\n";
+        //   error = true;
+        // }
+
+        // if (!/^\d{10}$/.test(phone)) {
+        //   errorString +=
+        //     "Phone number error: Has to be a 10 number digit, no hyphens or commas\n";
+        //   error = true;
+        // }
+
+        // if (pass !== passConf) {
+        //   errorString += "Password error: The given passwords do not match";
+        //   error = true;
+        // }
+
+        if (error) {
+          alert(errorString);
+        } else {
+          let xhr = new XMLHttpRequest();
+          xhr.open("GET", "formProcessor.html", true);
+        }
+
+        return false;
+      }
+    </script>
   </body>
 </html>
