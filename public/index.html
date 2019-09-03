@@ -10,7 +10,9 @@
       Name="form"
       style="display: flex; flex-direction: column; width: 100%;"
       id="formForm"
-      onsubmit="validateForm()"
+      onsubmit="return validateForm()"
+      method="get"
+      action="formProcessor.html"
     >
       <label for="accName">Account Name</label>
       <input Name="acc" id="accName" type="text" />
@@ -32,30 +34,16 @@
       <input Name="pass" id="password" type="password" />
       <label for="passwordConf">Password Confirmation</label>
       <input Name="passConf" id="passwordConf" type="password" />
+      <input type="hidden" Name="timestamp" id="timestamp" />
       <div style="display: flex; flex-direction: row-reverse; margin-top: 5px;">
         <input type="reset" value="Clear" style="margin-left: 5px;" />
         <input type="submit" />
       </div>
     </form>
     <script>
-      (function() {
-        "use strict";
-        window.addEventListener(
-          "load",
-          function() {
-            document.getElementById("formForm").addEventListener(
-              "submit",
-              function(event) {
-                event.target.checkValidity();
-                event.preventDefault(); // Prevent form submission and contact with server
-                event.stopPropagation();
-              },
-              false
-            );
-          },
-          false
-        );
-      })();
+      function getTimestamp() {
+        document.getElementById("timestamp").value = new Date().getTime();
+      }
 
       function olderThan18(day, month, year) {
         return new Date(year + 18, month - 1, day) <= new Date();
@@ -79,11 +67,11 @@
         //   error = true;
         // }
 
-        if (!/^[a-zA-Z][a-zA-Z0-9]+$/.test(accountName)) {
-          errorString +=
-            "Account name error: There can only be letters and numbers, and the first character has to be a letter.\n";
-          error = true;
-        }
+        // if (!/^[a-zA-Z][a-zA-Z0-9]+$/.test(accountName)) {
+        //   errorString +=
+        //     "Account name error: There can only be letters and numbers, and the first character has to be a letter.\n";
+        //   error = true;
+        // }
 
         // if (!email.includes(".")) {
         //   errorString +=
@@ -104,13 +92,13 @@
 
         if (error) {
           alert(errorString);
+          return false;
         } else {
-          let xhr = new XMLHttpRequest();
-          xhr.open("GET", "formProcessor.html", true);
+          return true;
         }
-
-        return false;
       }
+
+      getTimestamp();
     </script>
   </body>
 </html>
